@@ -1,1 +1,53 @@
-#TEST
+# TEST
+
+# Modification By OSM
+
+# New INFO
+# In ./cachelib/cachebench
+main function : ./main.cpp
+
+//Hot to Allocator
+in ./main.cpp
+1) main() => runnerInstance = std::make_unique<facebook::cachelib::cachebench::Runner>(config); // make Runner instruction
+
+in ./runner/Runner.cpp
+2) Runner:Runner() : stressor_() // make stressor instruction
+
+in ./runner/Stressor.cpp
+3) makeStressor() => makeGenerator() // constructor of stressor
+
+in ./runner/Stressor.cpp
+4)  makeGenerator() => std::make_unique<WorkloadGenerator>(config);
+
+in ./workload/OnlineGenerator.cpp 
+5)  WorkloadGenerator() => generateKeyDistributions(); // Allocate
+
+
+//How to Run
+in ./main.cpp
+1) main() => runnerInstance->run()
+
+in ./runner/Runner.cpp
+2) run() => stressor_->start() 
+
+in ./runner/Stressor.h
+class stressor
+
+in ./runner/Stressor.cpp
+makeStressor() // constructor of stressor
+cache 만들기 
+
+in ./runner/AsyncCacheStressor.h
+start()
+thread(=worker) 생성 및 run
+
+in ./runner/AsyncCacheStressor.h
+stop()
+thread(=worker) 종료 및 clearCache
+
+in ./runner/AsyncCacheStressor.h
+3) start() => stressByDiscreteDistribution()
+
+in ./runner/AsyncCacheStressor.h
+stressByDiscreteDistribution()
+operation 실행 
