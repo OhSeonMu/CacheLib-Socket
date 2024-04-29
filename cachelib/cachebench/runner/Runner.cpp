@@ -26,7 +26,7 @@ Runner::Runner(const CacheBenchConfig& config)
                                        config.getStressorConfig())} {}
 
 bool Runner::run(std::chrono::seconds progressInterval,
-                 const std::string& progressStatsFile) {
+                 const std::string& progressStatsFile, ClientData* cd) {
   ProgressTracker tracker{*stressor_, progressStatsFile};
 
   stressor_->start();
@@ -41,6 +41,11 @@ bool Runner::run(std::chrono::seconds progressInterval,
   auto cacheStats = stressor_->getCacheStats();
   auto opsStats = stressor_->aggregateThroughputStats();
   tracker.stop();
+
+  double durationSecs = durationNs / static_cast<double>(1e9);
+  double Mops = opsStats.ops / static_cast<double>(1e6);
+  cd->p99 = cacheStats.cacheFindLatencyNs.p99;
+  cd->M_Throughput = Mops / durationSecs;
 
   std::cout << "== Test Results ==\n== Allocator Stats ==" << std::endl;
   cacheStats.render(std::cout);

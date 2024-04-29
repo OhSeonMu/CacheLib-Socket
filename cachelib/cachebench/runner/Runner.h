@@ -28,6 +28,11 @@ namespace facebook {
 namespace cachelib {
 namespace cachebench {
 
+struct ClientData {
+	double p99;
+	double M_Throughput;
+};
+
 // A simple wrapper to maintain the stress run through an opaque stressor
 // instance.
 class Runner {
@@ -43,7 +48,7 @@ class Runner {
   //                            to in addition to stdtout. Ignored if empty
   // @return true if the run was successful, false if there is a failure.
   bool run(std::chrono::seconds progressInterval,
-           const std::string& progressStatsFile);
+           const std::string& progressStatsFile, ClientData* cd);
 
   // for testings using folly::Benchmark
   // in addition to running time, cachebench has several metrics
