@@ -171,7 +171,7 @@ int GetTimeout() {
 	return num_timeout;
 }
 
-void SendStatus(ClientData cd) {
+void SendStatus(facebook::cachelib::cachebench::ClientData cd) {
     struct sockaddr_in serv_addr;
     int sock = 0;
     int port = 9710;
@@ -238,7 +238,7 @@ int main(int argc, char** argv) {
     setupSignalHandler();
 
 	while (true) {
-		ClientData cd;
+		facebook::cachelib::cachebench::ClientData cd;
 
         FLAGS_timeout_seconds = GetTimeout();
 		if (FLAGS_timeout_seconds == 0)
