@@ -49,6 +49,9 @@ int main(int argc, char const *argv[]) {
 
 	close(sock);
 
+	if (atoi(num_trials) == 0)
+		return 0;
+
 	/************* Wait response *************/
 
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == 0) {

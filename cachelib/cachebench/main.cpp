@@ -99,6 +99,7 @@ void setupTimeoutHandler() {
                   "Stopping due to timeout {} seconds",
                   FLAGS_timeout_seconds);
             if (runnerInstance) {
+			  std::cout << "timeout handler abort benchmark" << std::endl;
               runnerInstance->abort();
             }
             eb.terminateLoopSoon();
@@ -106,8 +107,8 @@ void setupTimeoutHandler() {
           FLAGS_timeout_seconds * 1000);
       eb.loopForever();
       // We give another few seconds for the graceful shutdown to complete
-      eb.runAfterDelay([]() { XCHECK(false); }, 30 * 1000);
-      eb.loopForever();
+      //eb.runAfterDelay([]() { XCHECK(false); }, 30 * 1000);
+      //eb.loopForever();
     });
     stopperThread->detach();
   }
@@ -233,16 +234,21 @@ int main(int argc, char** argv) {
 #endif
 
   try {
-    runnerInstance =
-        std::make_unique<facebook::cachelib::cachebench::Runner>(config);
     setupSignalHandler();
 
 	while (true) {
 		facebook::cachelib::cachebench::ClientData cd;
 
+		runnerInstance =
+				std::make_unique<facebook::cachelib::cachebench::Runner>(config);
+
+		std::cout << "Ready to start benchmark" << std::endl;
         FLAGS_timeout_seconds = GetTimeout();
-		if (FLAGS_timeout_seconds == 0)
+		if (FLAGS_timeout_seconds == 0) {
+			std::cout << "Stop the benchmark" << std::endl;
 			return 0;
+		}
+		std::cout << "Start benchmark for " << FLAGS_timeout_seconds << "secs" << std::endl;
 
 		setupTimeoutHandler();
 

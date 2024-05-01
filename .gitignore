@@ -22,3 +22,5 @@ cachelib/external/glog/
 cachelib/external/googletest/
 cachelib/external/sparsemap/
 cachelib/external/*
+
+opt/
